@@ -13,6 +13,10 @@ const commands = [
   new SlashCommandBuilder().setName('consultar-evento')
     .setDescription('Consultar y re-exportar un evento histórico guardado')
     .toJSON(),
+  new SlashCommandBuilder().setName('consultar-registro')
+    .setDescription('[Admin] Ver los registros diarios y mensuales archivados')
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+    .toJSON(),
 
   // ── Admin - Rank general ───────────────────────────────────
   new SlashCommandBuilder().setName('calcular-inicio')
