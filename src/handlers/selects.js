@@ -2,10 +2,16 @@ const { AttachmentBuilder, MessageFlags } = require('discord.js');
 const { pool } = require('../db/pool');
 const { generarExcelEvento } = require('../excel/eventoExcel');
 const { fmtNum, formatDate } = require('../utils/format');
+const { handleSelectRegistroMes } = require('./consultarRegistro');
 
 async function handleSelects(interaction) {
   const { customId } = interaction;
   const guildId = interaction.guild.id;
+
+  // ── Navegar registros por mes ──────────────────────────────
+  if (customId === 'select_registro_mes') {
+    return handleSelectRegistroMes(interaction);
+  }
 
   // ── Re-exportar Excel de evento histórico ─────────────────
   if (customId === 'select_consultar_evento') {
