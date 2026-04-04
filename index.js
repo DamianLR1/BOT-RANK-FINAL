@@ -13,9 +13,9 @@ const { client }      = require('./src/client');
 const { setupDb }     = require('./src/db/setup');
 const { registerCommands } = require('./src/commands');
 const { syncRecentPoints } = require('./src/services/sync');
-const { postRankingMessage } = require('./src/services/ranking');
-const { postEventRankingMessage } = require('./src/services/ranking');
+const { postRankingMessage, postEventRankingMessage } = require('./src/services/ranking');
 const { programarReporteDiario } = require('./src/services/reporteDiario');
+const { programarRotacionDiaria } = require('./src/services/registroDiario');
 const { pool }        = require('./src/db/pool');
 require('./src/handlers/interactions');
 require('./src/handlers/messages');
@@ -44,6 +44,7 @@ client.once('ready', async () => {
   }, 5 * 60 * 1000);
 
   programarReporteDiario();
+  programarRotacionDiaria();
 });
 
 (async () => {
