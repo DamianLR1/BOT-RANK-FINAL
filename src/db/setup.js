@@ -1,4 +1,5 @@
 const { pool } = require('./pool');
+const { setupRegistros } = require('./setupRegistros');
 
 async function setupDb() {
   console.log('Conectando a la base de datos...');
@@ -67,6 +68,7 @@ async function setupDb() {
     [process.env.GUILD_ID]
   );
 
+  await setupRegistros();
   console.log('✅ Todas las tablas listas');
 }
 
