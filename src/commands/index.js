@@ -37,6 +37,11 @@ const commands = [
   new SlashCommandBuilder().setName('iniciar-evento')
     .setDescription('[Admin] Inicia un nuevo evento y comienza el rastreo')
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+    .addStringOption(o => o
+      .setName('nombre')
+      .setDescription('Nombre del evento (ej: Torneo Navidad 2026)')
+      .setRequired(true)
+    )
     .toJSON(),
   new SlashCommandBuilder().setName('cerrar-evento')
     .setDescription('[Admin] Cierra el evento activo y publica el podio')
