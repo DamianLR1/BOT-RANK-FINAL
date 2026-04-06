@@ -146,13 +146,32 @@ async function handleCommands(interaction) {
     const existente = await pool.query(`SELECT nombre FROM eventos WHERE guild=$1 AND activo=true LIMIT 1`, [guildId]);
     if (existente.rows.length)
       return interaction.reply({ content: `❌ Ya hay un evento activo: **${existente.rows[0].nombre}**. Cerralo primero.`, flags: [MessageFlags.Ephemeral] });
-    const modal = new ModalBuilder().setCustomId('iniciar-evento-modal').setTitle('Iniciar Nuevo Evento');
+
+    const nombreEvento = interaction.options.getString('nombre');
+    const modal = new ModalBuilder()
+      .setCustomId(`iniciar-evento-modal::${nombreEvento}`)
+      .setTitle(`Evento: ${nombreEvento.slice(0, 40)}`);
     modal.addComponents(
-      new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('nombre').setLabel('Nombre del evento').setStyle(TextInputStyle.Short).setPlaceholder('Ej: Torneo de Navidad 2026').setRequired(true)),
-      new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('comienzo').setLabel('Fecha de inicio').setStyle(TextInputStyle.Short).setPlaceholder('Ej: Viernes 10 Ene 20:00h').setRequired(true)),
-      new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('termina').setLabel('Fecha de fin').setStyle(TextInputStyle.Short).setPlaceholder('Ej: Domingo 12 Ene 23:59h').setRequired(true)),
-      new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('premios').setLabel('Premios').setStyle(TextInputStyle.Paragraph).setPlaceholder('🥇 1ro: ...\n🥈 2do: ...').setRequired(true)),
-      new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId('start_id').setLabel('ID de inicio (vacio = desde ahora)').setStyle(TextInputStyle.Short).setRequired(false))
+      new ActionRowBuilder().addComponents(
+        new TextInputBuilder().setCustomId('comienzo').setLabel('Fecha de inicio')
+          .setStyle(TextInputStyle.Short).setPlaceholder('Ej: Viernes 10 Ene 20:00h').setRequired(true)
+      ),
+      new ActionRowBuilder().addComponents(
+        new TextInputBuilder().setCustomId('termina').setLabel('Fecha de fin')
+          .setStyle(TextInputStyle.Short).setPlaceholder('Ej: Domingo 12 Ene 23:59h').setRequired(true)
+      ),
+      new ActionRowBuilder().addComponents(
+        new TextInputBuilder().setCustomId('premios').setLabel('Premios')
+          .setStyle(TextInputStyle.Paragraph).setPlaceholder('🥇 1ro: ...\n🥈 2do: ...').setRequired(true)
+      ),
+      new ActionRowBuilder().addComponents(
+        new TextInputBuilder().setCustomId('start_id').setLabel('ID de inicio (vacío = desde ahora)')
+          .setStyle(TextInputStyle.Short).setPlaceholder('Vacío = empezar desde este momento').setRequired(false)
+      ),
+      new ActionRowBuilder().addComponents(
+        new TextInputBuilder().setCustomId('end_id').setLabel('ID de fin (vacío = hasta último mensaje)')
+          .setStyle(TextInputStyle.Short).setPlaceholder('Vacío = ir hasta el mensaje más reciente').setRequired(false)
+      )
     );
     await interaction.showModal(modal);
   }
